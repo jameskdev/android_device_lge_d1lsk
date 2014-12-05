@@ -17,6 +17,7 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME   "LG-P930"
+#define BTM_DEF_LOCAL_NAME   "LG-F160S"
+#define BTA_DISABLE_DELAY 1000 /* in milliseconds */
 
 #endif
