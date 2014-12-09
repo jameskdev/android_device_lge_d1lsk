@@ -16,4 +16,4 @@ TARGET_PREBUILT_KERNEL := device/lge/d1lsk/kernel
 
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/d1lsk/bluetooth
 
-TARGET_RECOVERY_FSTAB = device/lge/d1l-common/rootdir/fstab.qcom
+TARGET_RECOVERY_FSTAB = device/lge/d1lsk/recovery.fstab

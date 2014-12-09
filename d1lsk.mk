@@ -5,7 +5,9 @@ $(call inherit-product-if-exists, vendor/lge/d1lsk/d1lsk-vendor.mk)
 ## Model specific files
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/config/d1lsk-keypad.kl:system/usr/keylayout/d1lsk-keypad.kl \
+    $(LOCAL_PATH)/fstab.d1lsk:root/fstab.d1lsk \
     $(LOCAL_PATH)/init.d1lsk.rc:root/init.d1lsk.rc \
+    $(LOCAL_PATH)/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/bootlogo_skt:root/sbin/bootlogo_skt \
     $(LOCAL_PATH)/ueventd.d1lsk.rc:root/ueventd.d1lsk.rc
 
