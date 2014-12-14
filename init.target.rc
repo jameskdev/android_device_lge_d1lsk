@@ -42,67 +42,27 @@ on early-init
 #LGE_CHANGE_E, [jiseok.kang], 2012-09-19, conflict init.rc on /vendor. so remove this one.otherwise symlink is not working.
 
 on fs
-    mount_all fstab.d1lsk
-
-    # LGE_UPDATE_START
-    # Executing tune2fs to reserve some region in /data. (40MB)
-    # 2012-02-02 G1-FS@lge.com
-    exec /system/bin/tune2fs -u system -r 10240 /dev/block/platform/msm_sdcc.1/by-name/userdata
-    # LGE_UPDATE_END
-
-    # Keeping following partitions outside fstab file. As user may not have
-    # these partition flashed on the device. Failure to mount any partition in fstab file
-    # results in failure to launch late-start class.
-
-    # LGE_UPDATE_START
-    wait /dev/block/platform/msm_sdcc.1/by-name/cache
-    exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/cache
-    # LGE_UPDATE_END
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
-
-    # LGE_UPDATE_START
-    wait /dev/block/platform/msm_sdcc.1/by-name/persist
-    exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/persist
-    # LGE_UPDATE_END
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
-
-    wait /dev/block/platform/msm_sdcc.1/by-name/modem
-    # LGE_UPDATE_START
-    #mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower dmask=177 fmask=177 # Original
-    mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro uid=1000 gid=1000 shortname=lower dmask=227 fmask=337
-    # LGE_UPDATE_END
-
     # Create mount point for LG Specific functions
     mkdir /sns 0771 system system
     mkdir /persist-lg 0771 system system
     mkdir /mpt 0775 system system
+    mkdir /tombstones 0771 system system
 
-    # LGE_UPDATE_START
-    wait /dev/block/platform/msm_sdcc.1/by-name/sns
+# make sure that mmc0 is ready
+    wait /dev/block/mmcblk0
+
+#Filesystem Check
+    exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/cache
+    exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/persist
     exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/sns
-    # LGE_UPDATE_END
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/sns /sns nosuid nodev barrier=1 noauto_da_alloc
-
-    # LGE_UPDATE_START
-    wait /dev/block/platform/msm_sdcc.1/by-name/drm
     exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/drm
-    # LGE_UPDATE_END
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/drm /persist-lg nosuid nodev barrier=1 noauto_da_alloc
-
-    # LGE_UPDATE_START
-    wait /dev/block/platform/msm_sdcc.1/by-name/mpt
     exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/mpt
-    # LGE_UPDATE_END
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/mpt /mpt nosuid nodev barrier=1 noauto_da_alloc
+    exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/tombstones
 
-    # LGE_UPDATE_START, Block below because tombstones-partition is not used any more from JellyBean
-    #mkdir /tombstones 0771 system system
-    # LGE_UPDATE_START
-    #wait /dev/block/platform/msm_sdcc.1/by-name/tombstones
-    #exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/tombstones
-    # LGE_UPDATE_END
-    #mount ext4 /dev/block/platform/msm_sdcc.1/by-name/tombstones /tombstones nosuid nodev barrier=1
-    # LGE_UPDATE_END
+    mount_all fstab.d1lsk
+
+    # Execute tune2fs to reserve some region in /data. (40MB)
+    exec /system/bin/tune2fs -u system -r 10240 /dev/block/platform/msm_sdcc.1/by-name/userdata
 
     mkdir /sns/cal 0771 system system
     mkdir /tombstones/modem 0771 system system
