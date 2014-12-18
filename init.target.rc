@@ -41,12 +41,12 @@ on early-init
 #    symlink /firmware/image /vendor/firmware
 #LGE_CHANGE_E, [jiseok.kang], 2012-09-19, conflict init.rc on /vendor. so remove this one.otherwise symlink is not working.
 
-on fs
+on emmc-fs
     # Create mount point for LG Specific functions
     mkdir /sns 0771 system system
     mkdir /persist-lg 0771 system system
     mkdir /mpt 0775 system system
-    mkdir /tombstones 0771 system system
+#   mkdir /tombstones 0771 system system
 
 # make sure that mmc0 is ready
     wait /dev/block/mmcblk0
@@ -59,7 +59,15 @@ on fs
     exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/mpt
     exec /system/bin/e2fsck -p /dev/block/platform/msm_sdcc.1/by-name/tombstones
 
-    mount_all fstab.d1lsk
+# Mount partitions
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/sns /sns nosuid nodev barrier=1 noauto_da_alloc
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/drm /persist-lg nosuid nodev barrier=1 noauto_da_alloc
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/mpt /mpt nosuid nodev barrier=1 noauto_da_alloc
+    mount vfat /dev/block/mmcblk0p1 /firmware ro umask=002 shortname=lower
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/system /system rw barrier=1
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/userdata /data nosuid nodev barrier=1 noauto_da_alloc data=ordered errors=continue
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
 
     # Execute tune2fs to reserve some region in /data. (40MB)
     exec /system/bin/tune2fs -u system -r 10240 /dev/block/platform/msm_sdcc.1/by-name/userdata
@@ -132,22 +140,6 @@ on property:ro.baseband=mdm
     start kickstart
 
 on init
-
-# on emmc mount the partition containing firmware
-on emmc-fs
-
-   # LGE_UPDATE_START
-   #######################################################################
-   #                       N.O.T.I.C.E.!.
-   # 'emmc-fs' is not parsed any more from JellyBean.
-   #######################################################################
-   # LGE_UPDATE_END
-
-# LGE_UPDATE_START, 2012/09/27, G1-FS@lge.com, G1-JB-FS@lge.com
-# Below is not necessary. system-partition is remounted in 'init.qcom.post_fs.sh'
-#on post-fs
-#   mount ext4 /dev/block/platform/msm_sdcc.1/by-name/system /system ro remount barrier=1
-# LGE_UPDATE_END
 
 # NFC Feature
    chmod 0666 /dev/pn544

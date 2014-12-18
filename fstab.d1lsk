@@ -10,8 +10,8 @@
 /dev/block/platform/msm_sdcc.1/by-name/userdata       /data        ext4    nosuid,nodev,barrier=1,noauto_da_alloc,errors=continue      wait,check,encryptable=/dev/block/platform/msm_sdcc.1/by-name/encrypt
 /dev/block/platform/msm_sdcc.1/by-name/cache          /cache       ext4    nosuid,nodev,barrier=1                     wait
 /dev/block/platform/msm_sdcc.1/by-name/persist        /persist     ext4    nosuid,nodev,barrier=1                     wait
-/dev/block/platform/msm_sdcc.1/by-name/modem          /firmware    vfat    ro,uid=1000,gid=1000,shortname=lower,dmask=227,fmask=337                     wait
+/dev/block/platform/msm_sdcc.1/by-name/modem          /firmware    vfat    ro,umask=002,shortname=lower                     wait
 /dev/block/platform/msm_sdcc.1/by-name/sns            /sns         ext4    nosuid,nodev,barrier=1,noauto_da_alloc     wait
 /dev/block/platform/msm_sdcc.1/by-name/drm            /persist-lg         ext4    nosuid,nodev,barrier=1,noauto_da_alloc     wait
 /dev/block/platform/msm_sdcc.1/by-name/mpt            /mpt         ext4    nosuid,nodev,barrier=1,noauto_da_alloc     wait
-/dev/block/platform/msm_sdcc.1/by-name/tombstones            /tombstones         ext4    nosuid,nodev,barrier=1     wait
+#/dev/block/platform/msm_sdcc.1/by-name/tombstones            /tombstones         ext4    nosuid,nodev,barrier=1     wait
