@@ -34,6 +34,11 @@
 import init.lge.usb.rc
 
 on early-init
+# Create /storage in early-init and mount it in order to get the storage working
+# It is a bad hack, but it works anyway
+    mkdir /storage 0050 root sdcard_r
+    mount tmpfs tmpfs /storage mode=0050,uid=0,gid=1028
+
     mkdir /firmware 0771 system system
     symlink /data/tombstones /tombstones
 #LGE_CHANGE_S, [brad.han], 2012-09-19, conflict init.rc on /vendor. so remove this one.otherwise symlink is not working.
